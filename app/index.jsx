@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HeaderComponent from "../components/HeaderComponent";
 import HomeScreen from "../screens/Home/HomeScreen"
 import MapPlotting from "../components/MapPlotting";
-import MapScreen from "../screens/MapSection/MapScreen";
 
 const Stack = createStackNavigator();
 
