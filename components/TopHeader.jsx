@@ -1,0 +1,94 @@
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Picker, FlatList } from "react-native";
+import PopoverComponent from "../commonComponent/PopoverComponent";
+
+const TopHeader = ({ language, changeLanguage, isLogin, navigate }) => {
+  const [anchorElLogin, setAnchorElLogin] = useState(null); // State for login popover
+
+  return (
+    <View className="flex flex-row bg-sky-950 justify-center pr-10 py-2">
+      <View className="flex-row text-white gap-6 items-center w-4/6 ">
+        <TouchableOpacity
+          children="Skip to main content"
+          className="text-white text-sm"
+        />
+        <TouchableOpacity >
+            <Text className="text-white">A-</Text>
+        </TouchableOpacity>
+        <TouchableOpacity >
+            <Text className="text-white">A</Text>
+        </TouchableOpacity>
+        <TouchableOpacity >
+            <Text className="text-white">A+</Text>
+        </TouchableOpacity>
+
+        {/* Language Selector */}
+        {/* <Picker
+          selectedValue={language}
+          onValueChange={(value) => changeLanguage(value)}
+          style={{ color: "white", backgroundColor: "#0369A1" }}
+        >
+          <Picker.Item label="English" value="en" />
+          <Picker.Item label="Marathi" value="mr" />
+          <Picker.Item label="Hindi" value="hi" />
+        </Picker> */}
+
+        {isLogin ? (
+          <TouchableOpacity
+            children={`Welcome back, ${isLogin}`}
+            className="bg-white text-black text-sm py-1 px-3 rounded"
+          />
+        ) : (
+        //   <PopoverComponent
+        //     anchorEl={anchorElLogin}
+        //     handleClick={(e) => setAnchorElLogin(e.currentTarget)}
+        //     handleClose={() => setAnchorElLogin(null)}
+        //     buttonContent="Login"
+        //     className="bg-white text-black py-1 px-3 rounded"
+        //     popoverContent={
+        //       <FlatList
+        //         data={[
+        //           {
+        //             key: "User",
+        //             path: "/citizen-login",
+        //           },
+        //           {
+        //             key: "Admin",
+        //             path: "/admin-login",
+        //           },
+        //           {
+        //             key: "Department",
+        //             path: "/department-login",
+        //           },
+        //           {
+        //             key: "Employee",
+        //             path: "/employee-login",
+        //           },
+        //         ]}
+        //         renderItem={({ item }) => (
+        //           <TouchableOpacity
+        //             onPress={() => navigate(item.path)}
+        //             className="px-4 py-2 hover:bg-gray-100 rounded"
+        //           >
+        //             <Text className="text-gray-700 text-sm">
+        //               Login as {item.key}
+        //             </Text>
+        //           </TouchableOpacity>
+        //         )}
+        //       />
+        //     }
+        //   />
+        <Text>Hello</Text>
+        )}
+        <TouchableOpacity
+          className="bg-white text-black py-1 px-3 rounded"
+          onClick={() => navigate("/register-citizen")}
+        >
+            <Text>Register as Citizen</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default TopHeader;
