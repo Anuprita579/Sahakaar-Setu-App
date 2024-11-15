@@ -2,26 +2,20 @@ import React from "react";
 import { View, Text, TouchableOpacity, Modal } from "react-native";
 import PropTypes from "prop-types";
 
-// Use NativeWind classes directly in the component
 function PopoverComponent({
-  anchorEl,
-  handleClick,
-  handleClose,
+  open,
+  togglePopover,
   buttonContent,
-  buttonId,
-  popoverContent,
-  anchorOrigin = { vertical: "bottom", horizontal: "left" }, // Default Props
   buttonClassName,
+  popoverContent,
+  buttonId,
   popoverClassName,
-  buttonStyle,
   popoverStyle,
 }) {
-  const open = Boolean(anchorEl);
-
   return (
     <View>
       <TouchableOpacity
-        onPress={handleClick}
+        onPress={() => togglePopover(!open)}
         className={buttonClassName} // Applying NativeWind class here
         accessibilityLabel={buttonId}
       >
@@ -33,22 +27,18 @@ function PopoverComponent({
           transparent
           animationType="fade"
           visible={open}
-          onRequestClose={handleClose}
+          onRequestClose={() => togglePopover(false)}
         >
           <View className="flex-1 justify-center items-center">
             <View
               className={`${popoverClassName} absolute`} // Applying NativeWind class here
-              style={{
-                ...popoverStyle,
-                top: anchorOrigin.vertical === "bottom" ? 100 : undefined,
-                left: anchorOrigin.horizontal === "left" ? 10 : undefined,
-              }}
+              style={popoverStyle}
             >
               {popoverContent}
             </View>
             <TouchableOpacity
               className="absolute top-0 left-0 w-full h-full"
-              onPress={handleClose}
+              onPress={() => togglePopover(false)} // Close the popover when clicking outside
             />
           </View>
         </Modal>
@@ -60,16 +50,11 @@ function PopoverComponent({
 PopoverComponent.propTypes = {
   buttonContent: PropTypes.node.isRequired,
   popoverContent: PropTypes.node.isRequired,
-  anchorOrigin: PropTypes.shape({
-    vertical: PropTypes.oneOf(["top", "center", "bottom"]),
-    horizontal: PropTypes.oneOf(["left", "center", "right"]),
-  }),
-  handleClick: PropTypes.func.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired, // We pass the open state
+  togglePopover: PropTypes.func.isRequired, // Function to toggle popover visibility
   buttonId: PropTypes.string,
   buttonClassName: PropTypes.string,
   popoverClassName: PropTypes.string,
-  buttonStyle: PropTypes.object,
   popoverStyle: PropTypes.object,
 };
 

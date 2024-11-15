@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Menu, Search } from "react-native-vector-icons/MaterialIcons";
-// import ButtonComponent from "../commonComponents/ButtonComponent"; // Adjust for React Native
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"; // Correct import
+
 // import PopoverComponent from "../commonComponents/PopoverComponent"; // Adjust for React Native
 // import MenuLayout from "../Components/MenuLayout"; // Ensure compatibility for React Native
 
@@ -40,14 +40,15 @@ const BelowHeader = ({ anchorEl, setAnchorEl }) => {
             placeholder="Search..."
             className="bg-white p-2 text-black w-72 rounded-l"
           />
-          {/* <TouchableOpacity
-            children={<Search size={24} color="white" />}
+          <TouchableOpacity
             style={{
               backgroundColor: "rgb(8 47 73)",
               borderTopRightRadius: 8,
               borderBottomRightRadius: 8,
             }}
-          /> */}
+          >
+            <MaterialIcons name="search" size={24} color="white" /> 
+            </TouchableOpacity>
         </View>
 
         {/* Popover Menu */}
@@ -55,7 +56,7 @@ const BelowHeader = ({ anchorEl, setAnchorEl }) => {
           anchorEl={anchorEl}
           handleClick={(e) => setAnchorEl(e.currentTarget)}
           handleClose={() => setAnchorEl(null)}
-          buttonContent={<Menu size={24} color="white" />}
+          buttonContent={ <MaterialIcons name="menu" size={24} color="white" /> }
           buttonId="popover-button"
           buttonStyle={{
             backgroundColor: "transparent",
