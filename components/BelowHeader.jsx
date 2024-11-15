@@ -10,7 +10,7 @@ const BelowHeader = ({ anchorEl, setAnchorEl }) => {
   const navigation = useNavigation();
 
   return (
-    <View className="flex justify-center bg-gradient-to-r from-blue-900 to-blue-400">
+    <View className="flex justify-center bg-blue-400">
       <View className="flex flex-column items-center gap-4 py-2 px-4">
         {/* Logo and Title */}
         <TouchableOpacity

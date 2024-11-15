@@ -57,7 +57,7 @@ const NewsCard = ({
   const backgroundImageUrl = newsImage || defaultImageURL;
 
   return (
-    <View className="bg-slate-100 border border-gray-200 rounded-lg shadow-lg w-72 p-4 m-2">
+    <View horizontal={true} className="bg-slate-100 border border-gray-200 rounded-lg shadow-lg w-72 p-4 m-2">
       <Image
         source={{ uri: backgroundImageUrl }}
         className="h-40 w-full rounded-lg"
@@ -85,8 +85,9 @@ const NewsCard = ({
 const News = () => {
   return (
     <ScrollView
-      contentContainerStyle={{ alignItems: "center" }}
+      // style={{ alignItems: "center" }}
       className="flex flex-wrap p-4"
+      horizontal={true}
     >
       {news.map((item, index) => (
         <MotiView
