@@ -6,9 +6,9 @@ import { Video } from 'expo-video';
 const videoUrl = require("../../assets/home_vid.mp4");
 
 const Banner = ({
-  txtSpan1,
-  txtSpan2,
-  desc,
+  txtSpan1 = "SAHKAAR",
+  txtSpan2 = "SETU",
+  desc = "Govern Smarter, Govern Better"
 }) => {
   return (
     <View className="relative w-full h-[70vh]">

@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity,TouchableNativeFeedback } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TouchableNativeFeedback } from "react-native";
 import News from "./News";
 import MapPlotting from "../../components/MapPlotting";
 import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
-    const navigation=useNavigation();
+  const navigation = useNavigation();
 
   return (
-    <ScrollView  className="bg-slate-100">
+    <ScrollView className="bg-slate-100">
+
       {/* Banner */}
       {/* <View className="mt-4 px-4">
         <Banner
@@ -46,9 +47,16 @@ const HomeScreen = () => {
             © 2024 Sahkaar Setu. All rights reserved.
         </Text>
       </View>
-
     </ScrollView>
   )
 }
 
 export default HomeScreen
+
+// DEPARTMENT LOGIN 
+// import DepartmentLogin from "../Login/DepartmentLogin"
+
+// <View className="flex-1 justify-center items-center bg-gray-50">
+// <Text className="text-3xl font-bold mb-6">Welcome to the Platform</Text>
+// <DepartmentLogin />
+// </View>
