@@ -6,6 +6,7 @@ import HeaderComponent from "../components/HeaderComponent";
 import HomeScreen from "../screens/Home/HomeScreen"
 import MapPlotting from "../components/MapPlotting";
 import DepartmentLogin from "../screens/Login/DepartmentLogin"
+import Documents from "../screens/Home/Documents"
 
 const Stack = createStackNavigator();
 
@@ -13,14 +14,17 @@ export default function Index() {
   return (
     <NavigationIndependentTree>
       <NavigationContainer>
-      {/* Header */}
-      <HeaderComponent />
 
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" showHeaders={false} options={{headerShown:false}} component={HomeScreen} />
-        <Stack.Screen name="MapPlotting" options={{headerShown:false}} component={MapPlotting} />
-        <Stack.Screen name="DepartmentLogin" options={{headerShown:false}} component={DepartmentLogin} />
-      </Stack.Navigator>
+        {/* Header */}
+        <HeaderComponent />
+
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" showHeaders={false} options={{ headerShown: false }} component={HomeScreen} />
+          <Stack.Screen name="MapPlotting" options={{ headerShown: false }} component={MapPlotting} />
+          <Stack.Screen name="DepartmentLogin" options={{ headerShown: false }} component={DepartmentLogin} />
+          <Stack.Screen name="Documents" options={{ headerShown: false }} component={Documents} />
+
+        </Stack.Navigator>
 
       </NavigationContainer>
     </NavigationIndependentTree>

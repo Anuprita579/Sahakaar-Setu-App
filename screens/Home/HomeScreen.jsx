@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TouchableNativeFeedback } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import News from "./News";
 import MapPlotting from "../../components/MapPlotting";
 import { useNavigation } from '@react-navigation/native';
@@ -39,6 +39,17 @@ const HomeScreen = () => {
             Visit Map
         </Text>
       </TouchableOpacity>
+
+
+      <TouchableOpacity
+        className="bg-teal-500 p-4"
+        onPress={() => navigation.navigate("Documents")}
+      >
+        <Text className="text-white">
+            Documents
+        </Text>
+      </TouchableOpacity>
+
 
 
       {/* Footer */}
