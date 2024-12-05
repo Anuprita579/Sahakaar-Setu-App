@@ -1,25 +1,29 @@
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
 import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 
 import HeaderComponent from "../components/HeaderComponent";
 import HomeScreen from "../screens/Home/HomeScreen"
 import MapPlotting from "../components/MapPlotting";
+import DepartmentLogin from "../screens/Login/DepartmentLogin"
 
 const Stack = createStackNavigator();
 
 export default function Index() {
   return (
-    <>
+    <NavigationIndependentTree>
+      <NavigationContainer>
       {/* Header */}
       <HeaderComponent />
 
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" showHeaders={false} options={{headerShown:false}} component={HomeScreen} />
         <Stack.Screen name="MapPlotting" options={{headerShown:false}} component={MapPlotting} />
+        <Stack.Screen name="DepartmentLogin" options={{headerShown:false}} component={DepartmentLogin} />
       </Stack.Navigator>
 
-    </>
+      </NavigationContainer>
+    </NavigationIndependentTree>
   );
 }
 // import { NavigationContainer } from '@react-navigation/native';

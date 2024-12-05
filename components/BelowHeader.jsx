@@ -50,6 +50,7 @@ const BelowHeader = ({ anchorEl, setAnchorEl }) => {
             <MaterialIcons name="search" size={24} color="white" /> 
             </TouchableOpacity>
         </View>
+        
 
         {/* Popover Menu */}
         {/* <PopoverComponent
