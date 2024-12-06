@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import React, { useRef }  from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity, Share  } from "react-native";
 import { MotiView } from "moti"; // For animations
-// import "nativewind";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const news = [
     {
@@ -49,7 +49,8 @@ const NewsCard = ({
   newsSource,
   desc,
   newsDate,
-  newsImage,
+  newsImage, 
+  onShare, 
 }) => {
   const defaultImageURL =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPZU58UuWue5MRwUfeTtOvf8YijLeQ1vQQHzrKi8-zw15ATdTzFZq3imIBHlFNfOzQ6Tr8hhk&s=10";
@@ -57,7 +58,9 @@ const NewsCard = ({
   const backgroundImageUrl = newsImage || defaultImageURL;
 
   return (
-    <View horizontal={true} className="bg-slate-100 border border-gray-200 rounded-lg shadow-lg w-72 p-4 m-2">
+
+    
+    <View horizontal={true} collapsable={false} className="bg-slate-100 border border-gray-200 rounded-lg shadow-lg w-72 p-4 m-2">
       <Image
         source={{ uri: backgroundImageUrl }}
         className="h-40 w-full rounded-lg"
@@ -77,19 +80,35 @@ const NewsCard = ({
       <View className="flex flex-row justify-between mt-4">
         <Text className="text-gray-400 text-xs">Posted on {newsSource}</Text>
         <Text className="text-gray-400 text-xs">{newsDate}</Text>
+        <TouchableOpacity onPress={() => onShare({ newsTitle, desc })}>
+        <Text><MaterialIcons name="share" size={16} color="black" /></Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
 const News = () => {
+  const handleShare = async ({ newsTitle, desc }) => {
+    const message = `Check out this news:\n\nTitle: ${newsTitle}\nDescription: ${desc}`;
+    try {
+      await Share.share({
+        message,
+      });
+    } catch (error) {
+      console.error("Error sharing content:", error);
+      Alert.alert("Error", "An error occurred while trying to share.");
+    }
+  };
   return (
     <ScrollView
       // style={{ alignItems: "center" }}
       className="flex flex-wrap p-4"
       horizontal={true}
     >
-      {news.map((item, index) => (
+      {news.map((item, index) => {
+        return(
+          <View key={index}>
         <MotiView
           key={index}
           from={{ opacity: 0, translateY: 50 }}
@@ -99,6 +118,7 @@ const News = () => {
             duration: 500,
             delay: index * 200,
           }}
+          onAnimationComplete={() => console.log("Animation Completed")}
         >
           <NewsCard
             ministryName={item.ministryName}
@@ -108,9 +128,11 @@ const News = () => {
             newsImage={item.newsImage}
             newsDate={item.newsDate}
             newsSource={item.newsSource}
+            onShare={handleShare}
           />
         </MotiView>
-      ))}
+        </View>
+      )})}
     </ScrollView>
   );
 };
