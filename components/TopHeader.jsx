@@ -14,9 +14,9 @@ const TopHeader = ({ language, changeLanguage, isLogin, navigate }) => {
     return (
         <View className="flex flex-row bg-sky-950 justify-center pr-10 py-2">
             <View className="flex-row text-white gap-6 items-center w-4/6 ">
-                <TouchableOpacity className="bg-white text-black py-1 px-3 rounded">
+                {/* <TouchableOpacity className="bg-white text-black py-1 px-3 rounded">
                     <Text>Skip to main Content</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity >
                     <Text className="text-white">A-</Text>
                 </TouchableOpacity>

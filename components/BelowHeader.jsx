@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons"; // Correct import
 
 // import PopoverComponent from "../commonComponents/PopoverComponent"; // Adjust for React Native
 // import MenuLayout from "../Components/MenuLayout"; // Ensure compatibility for React Native
@@ -34,22 +33,7 @@ const BelowHeader = ({ anchorEl, setAnchorEl }) => {
           </View>
         </TouchableOpacity>
 
-        {/* Search Bar */}
-        <View className="flex flex-row items-center bg-sky-950 rounded">
-          <TextInput
-            placeholder="Search..."
-            className="bg-white p-2 text-black w-72 rounded-l"
-          />
-          <TouchableOpacity
-            style={{
-              backgroundColor: "rgb(8 47 73)",
-              borderTopRightRadius: 8,
-              borderBottomRightRadius: 8,
-            }}
-          >
-            <MaterialIcons name="search" size={24} color="white" /> 
-            </TouchableOpacity>
-        </View>
+        
         
 
         {/* Popover Menu */}
@@ -72,7 +56,7 @@ const BelowHeader = ({ anchorEl, setAnchorEl }) => {
         /> */}
 
         {/* Join Us Button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           children="Join Us"
           style={{
             backgroundColor: "#E0A800",
@@ -82,7 +66,7 @@ const BelowHeader = ({ anchorEl, setAnchorEl }) => {
           }}
         >
             <Text>Join us</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

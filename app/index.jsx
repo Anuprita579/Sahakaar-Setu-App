@@ -7,6 +7,7 @@ import HomeScreen from "../screens/Home/HomeScreen"
 import MapPlotting from "../components/MapPlotting";
 import DepartmentLogin from "../screens/Login/DepartmentLogin"
 import Documents from "../screens/Home/Documents"
+import BottomStack from "../components/BottomStack";
 
 const Stack = createStackNavigator();
 
@@ -17,12 +18,13 @@ export default function Index() {
 
         {/* Header */}
         <HeaderComponent />
+        
 
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" showHeaders={false} options={{ headerShown: false }} component={HomeScreen} />
+        <Stack.Navigator initialRouteName="BottomStack">
+        <Stack.Screen name="BottomStack" showHeaders={false} options={{ headerShown: false }} component={BottomStack} />
+          {/* <Stack.Screen name="Home" showHeaders={false} options={{ headerShown: false }} component={HomeScreen} /> */}
           <Stack.Screen name="MapPlotting" options={{ headerShown: false }} component={MapPlotting} />
           <Stack.Screen name="DepartmentLogin" options={{ headerShown: false }} component={DepartmentLogin} />
-          <Stack.Screen name="Documents" options={{ headerShown: false }} component={Documents} />
 
         </Stack.Navigator>
 

@@ -53,7 +53,7 @@ const NewsCard = ({
   onShare, 
 }) => {
   const defaultImageURL =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPZU58UuWue5MRwUfeTtOvf8YijLeQ1vQQHzrKi8-zw15ATdTzFZq3imIBHlFNfOzQ6Tr8hhk&s=10";
+    "https://mohua.gov.in/upload/photogallery/media/Cvq5rxIWEAAUliS.jpg";
 
   const backgroundImageUrl = newsImage || defaultImageURL;
 
