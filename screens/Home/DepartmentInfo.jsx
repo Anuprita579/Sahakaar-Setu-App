@@ -2,39 +2,62 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Alert, StyleSheet } from "react-native";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../Firebase/config"; // Ensure your Firestore setup is correct
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
 export default function DepartmentInfo() {
   const [departmentData, setDepartmentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [department, setDepartment] = useState(""); // To store department name
 
   useEffect(() => {
-    // Fetch data from Firestore
-    const fetchDepartmentInfo = async () => {
+    // Fetch the department from AsyncStorage
+    const getDepartmentFromStorage = async () => {
       try {
-        // Reference to the department document
-        const departmentRef = doc(db, "departmentsInfo", "Water Supply and Sewage");
-        
-        // Get the document data
-        const docSnap = await getDoc(departmentRef);
-        
-        if (docSnap.exists()) {
-          // If document exists, set the department data
-          setDepartmentData(docSnap.data());
+        const storedDepartment = await AsyncStorage.getItem('userDepartment');
+        if (storedDepartment) {
+          setDepartment(storedDepartment);
         } else {
-          // If no document is found
-          setError("No such department found!");
+          setError("Department not found in storage.");
         }
       } catch (err) {
-        setError("An error occurred while fetching the department data.");
-        console.error("Error fetching department data: ", err);
-      } finally {
-        setLoading(false); // Set loading to false after data is fetched
+        setError("An error occurred while retrieving the department.");
+        console.error("Error fetching department from AsyncStorage: ", err);
       }
     };
 
-    fetchDepartmentInfo();
+    getDepartmentFromStorage();
   }, []);
+
+  useEffect(() => {
+    // Only fetch department data from Firestore if department is set
+    if (department) {
+      const fetchDepartmentInfo = async () => {
+        try {
+          // Reference to the department document using the department name from AsyncStorage
+          const departmentRef = doc(db, "departmentsInfo", department);
+
+          // Get the document data
+          const docSnap = await getDoc(departmentRef);
+
+          if (docSnap.exists()) {
+            // If document exists, set the department data
+            setDepartmentData(docSnap.data());
+          } else {
+            // If no document is found
+            setError("No such department found!");
+          }
+        } catch (err) {
+          setError("An error occurred while fetching the department data.");
+          console.error("Error fetching department data: ", err);
+        } finally {
+          setLoading(false); // Set loading to false after data is fetched
+        }
+      };
+
+      fetchDepartmentInfo();
+    }
+  }, [department]); // Trigger this effect when department is available
 
   if (loading) {
     return <Text>Loading...</Text>;

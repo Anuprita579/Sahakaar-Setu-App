@@ -4,6 +4,8 @@ import LogoImage from '../../assets/images/Logo.png';
 import { Picker } from '@react-native-picker/picker';
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../Firebase/config"; // Import Firebase config
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import { useNavigation } from "@react-navigation/native"; // Import useNavigation
 
 export default function DepartmentLogin() {
   const [role, setRole] = useState("Head");
@@ -11,6 +13,7 @@ export default function DepartmentLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigation = useNavigation(); // Hook to access navigation
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -35,8 +38,16 @@ export default function DepartmentLogin() {
           if (employee.password === password) {
             // If password matches, login is successful
             Alert.alert("Login Success", `Welcome, ${employee.Name}!`);
+
+            // Save login state and user data in AsyncStorage
+            await AsyncStorage.setItem('isLoggedIn', 'true');
+            await AsyncStorage.setItem('userEmail', email);
+            await AsyncStorage.setItem('userName', employee.Name);
+            await AsyncStorage.setItem('userRole', employee.role);
+            await AsyncStorage.setItem('userDepartment', department);
+            
             // Navigate to home or main page here
-            // navigation.navigate("Home");
+            navigation.navigate("HomeScreen");  // This navigates to the "Home" screen (make sure Home is correctly defined in your navigator)
           } else {
             setError("Incorrect password. Please try again.");
           }
@@ -88,7 +99,6 @@ export default function DepartmentLogin() {
                 <Picker.Item label="Fire Services" value="Fire Services" />
                 <Picker.Item label="Finance and Accounts" value="Finance and Accounts" />
                 <Picker.Item label="Urban Planning and Development" value="Urban Planning and Development" />
-                {/* Add other departments as needed */}
               </Picker>
             </View>
           )}
