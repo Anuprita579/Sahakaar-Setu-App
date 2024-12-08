@@ -47,7 +47,7 @@ export default function DepartmentLogin() {
             await AsyncStorage.setItem('userDepartment', department);
             
             // Navigate to home or main page here
-            navigation.navigate("HomeScreen");  // This navigates to the "Home" screen (make sure Home is correctly defined in your navigator)
+            navigation.navigate("BottomStack");
           } else {
             setError("Incorrect password. Please try again.");
           }
