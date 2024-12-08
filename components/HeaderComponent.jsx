@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 const HeaderComponent = () => {
   const navigation = useNavigation();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState("Login");
   const [language, setLanguage] = useState("en");
 
   // Retrieve data from AsyncStorage on component mount
@@ -18,8 +18,8 @@ const HeaderComponent = () => {
       const storedLanguage = await AsyncStorage.getItem("language");
       setLanguage(storedLanguage || "en");
 
-      const userName = await AsyncStorage.getItem("name");
-      setIsLogin(!!userName); // Boolean indicating if user is logged in
+      const userName = await AsyncStorage.getItem("userName");
+      setIsLogin(userName); // Boolean indicating if user is logged in
     };
 
     fetchData();
@@ -43,6 +43,7 @@ const HeaderComponent = () => {
         language={language}
         changeLanguage={changeLanguage}
         isLogin={isLogin}
+        setIsLogin={setIsLogin}
         navigate={navigation.navigate}
       />
       <BelowHeader

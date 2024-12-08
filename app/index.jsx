@@ -8,6 +8,8 @@ import MapPlotting from "../components/MapPlotting";
 import DepartmentLogin from "../screens/Login/DepartmentLogin"
 import Documents from "../screens/Home/Documents"
 import BottomStack from "../components/BottomStack";
+import Profile from "../screens/Profile/Profile";
+import CitizenLogin from "../screens/Login/CitizenLogin";
 
 const Stack = createStackNavigator();
 
@@ -25,6 +27,8 @@ export default function Index() {
           {/* <Stack.Screen name="Home" showHeaders={false} options={{ headerShown: false }} component={HomeScreen} /> */}
           <Stack.Screen name="MapPlotting" options={{ headerShown: false }} component={MapPlotting} />
           <Stack.Screen name="DepartmentLogin" options={{ headerShown: false }} component={DepartmentLogin} />
+          <Stack.Screen name="CitizenLogin" options={{ headerShown: false }} component={CitizenLogin} />
+          <Stack.Screen name="Profile" component={Profile} />
 
         </Stack.Navigator>
 

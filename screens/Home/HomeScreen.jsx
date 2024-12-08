@@ -7,6 +7,9 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import DepartmentDirectory from "./DepartmentDirectory";
 import DepartmentInfo from "./DepartmentInfo";
 import AddTask from "../ClassD/AddTask";
+import Profile from "../Profile/Profile";
+import Tasks from "../Task/Tasks";
+import Grievance from "../Grievance/Grievance";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -60,6 +63,31 @@ const HomeScreen = () => {
         <DepartmentInfo />
       </View>
 
+
+   {/* Profile  */}
+      <View className="mt-6 px-4 bg-white rounded-lg py-4">
+        <Text className="text-3xl font-bold text-center text-black mt-10">
+          Profile 
+          {/* <Text className="text-sky-700"> Directory</Text> */}
+        </Text>
+        <Profile />
+      </View>
+
+      <View className="mt-6 px-4 bg-white rounded-lg py-4">
+        <Text className="text-3xl font-bold text-center text-black mt-10">
+          Tasks
+          {/* <Text className="text-sky-700"> Directory</Text> */}
+        </Text>
+        <Tasks />
+      </View>
+
+      <View className="mt-6 px-4 bg-white rounded-lg py-4">
+        <Text className="text-3xl font-bold text-center text-black mt-10">
+          Grivence
+          {/* <Text className="text-sky-700"> Directory</Text> */}
+        </Text>
+        <Grievance/>
+      </View>
 
       <AddTask />
 

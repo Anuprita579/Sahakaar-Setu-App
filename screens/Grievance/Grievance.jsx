@@ -5,16 +5,17 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import { db, storage } from '../../Firebase/config';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const GrievanceForm = () => {
-  const [userName, setUserName] = useState(sessionStorage.getItem("name"));
-  const [email, setEmail] = useState(sessionStorage.getItem('email'));
+const Grievance = () => {
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState('');
   const [grievanceType, setGrievanceType] = useState('');
   const [location, setLocation] = useState('');
-  const [latlon, setLatlon] = useState([sessionStorage.getItem("lat"),sessionStorage.getItem("lon")]);
+  const [latlon, setLatlon] = useState([null, null]);
   const [priority, setPriority] = useState('');
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
@@ -26,6 +27,16 @@ const GrievanceForm = () => {
       const departmentsSnapshot = await getDocs(departmentsCollection);
       const departmentsList = departmentsSnapshot.docs.map((doc) => doc.data());
       setDepartments(departmentsList);
+
+      // Fetch user details from AsyncStorage
+      const storedUserName = await AsyncStorage.getItem('name');
+      const storedEmail = await AsyncStorage.getItem('email');
+      const storedLat = await AsyncStorage.getItem('lat');
+      const storedLon = await AsyncStorage.getItem('lon');
+      
+      setUserName(storedUserName || '');
+      setEmail(storedEmail || '');
+      setLatlon([storedLat, storedLon]);
     };
     fetchData();
   }, []);
@@ -42,8 +53,7 @@ const GrievanceForm = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setUploading(true);
 
     try {
@@ -85,13 +95,11 @@ const GrievanceForm = () => {
 
       setUploading(false);
 
-      // Reset the form
-      setUserName('');
-      setEmail('');
+      // Reset form after submission
       setPhone('');
       setDepartment('');
       setGrievanceType('');
-      setLocation('');  
+      setLocation('');
       setPriority('');
       setDescription('');
       setImages([]);
@@ -104,118 +112,115 @@ const GrievanceForm = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle="p-6 bg-white">
-      <Text className="text-2xl font-bold mb-4 text-gray-800">Submit a Grievance</Text>
-      <View className="space-y-4">
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Your Name</Text>
-          <TextInput
-            className="mt-1 p-2 border rounded-md"
-            placeholder="Enter your name"
-            value={userName}
-            onChangeText={setUserName}
-            required
-          />
-        </View>
+    <ScrollView style={{ padding: 20 }}>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Submit a Grievance</Text>
 
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Email Address</Text>
-          <TextInput
-            className="mt-1 p-2 border rounded-md"
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            required
-          />
-        </View>
-
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Phone Number</Text>
-          <TextInput
-            className="mt-1 p-2 border rounded-md"
-            placeholder="Enter your phone number"
-            value={phone}
-            onChangeText={setPhone}
-            required
-          />
-        </View>
-
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Department</Text>
-          <TextInput
-            className="mt-1 p-2 border rounded-md"
-            placeholder="Select a department"
-            value={department}
-            onChangeText={setDepartment}
-            required
-          />
-        </View>
-
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Type of Grievance</Text>
-          <TextInput
-            className="mt-1 p-2 border rounded-md"
-            placeholder="Enter grievance type"
-            value={grievanceType}
-            onChangeText={setGrievanceType}
-            required
-          />
-        </View>
-
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Location</Text>
-          <TextInput
-            className="mt-1 p-2 border rounded-md"
-            placeholder="Enter location"
-            value={location}
-            onChangeText={setLocation}
-            required
-          />
-        </View>
-
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Priority Level</Text>
-          <TextInput
-            className="mt-1 p-2 border rounded-md"
-            placeholder="Select priority level"
-            value={priority}
-            onChangeText={setPriority}
-            required
-          />
-        </View>
-
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Detailed Description</Text>
-          <TextInput
-            className="mt-1 p-2 border rounded-md"
-            placeholder="Provide description"
-            value={description}
-            onChangeText={setDescription}
-            required
-            multiline
-          />
-        </View>
-
-        <View>
-          <Text className="block text-sm font-medium text-gray-700">Upload Images (optional)</Text>
-          <Button title="Pick images" onPress={handleImageUpload} />
-          <View className="flex-row mt-2">
-            {images.length > 0 && images.map((image, index) => (
-              <Image key={index} source={{ uri: image.uri }} style={{ width: 80, height: 80, marginRight: 8 }} />
-            ))}
-          </View>
-        </View>
-
-        <TouchableOpacity
-          className={`mt-4 py-2 px-4 rounded-md text-white text-center ${uploading ? 'bg-gray-400' : 'bg-indigo-600'}`}
-          onPress={handleSubmit}
-          disabled={uploading}
-        >
-          <Text>{uploading ? 'Submitting...' : 'Submit Grievance'}</Text>
-        </TouchableOpacity>
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Your Name</Text>
+        <TextInput
+          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          placeholder="Enter your name"
+          value={userName}
+          onChangeText={setUserName}
+        />
       </View>
+
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Email Address</Text>
+        <TextInput
+          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          placeholder="Enter your email"
+          value={email}
+          onChangeText={setEmail}
+        />
+      </View>
+
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Phone Number</Text>
+        <TextInput
+          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          placeholder="Enter your phone number"
+          value={phone}
+          onChangeText={setPhone}
+        />
+      </View>
+
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Department</Text>
+        <TextInput
+          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          placeholder="Enter department"
+          value={department}
+          onChangeText={setDepartment}
+        />
+      </View>
+
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Grievance Type</Text>
+        <TextInput
+          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          placeholder="Enter grievance type"
+          value={grievanceType}
+          onChangeText={setGrievanceType}
+        />
+      </View>
+
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Location</Text>
+        <TextInput
+          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          placeholder="Enter location"
+          value={location}
+          onChangeText={setLocation}
+        />
+      </View>
+
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Priority Level</Text>
+        <TextInput
+          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          placeholder="Enter priority level"
+          value={priority}
+          onChangeText={setPriority}
+        />
+      </View>
+
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Description</Text>
+        <TextInput
+          style={{ height: 80, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8, textAlignVertical: 'top' }}
+          placeholder="Enter a detailed description"
+          value={description}
+          onChangeText={setDescription}
+          multiline
+        />
+      </View>
+
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ fontSize: 16 }}>Upload Images</Text>
+        <Button title="Pick images" onPress={handleImageUpload} />
+        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+          {images.length > 0 && images.map((image, index) => (
+            <Image key={index} source={{ uri: image.uri }} style={{ width: 80, height: 80, marginRight: 8 }} />
+          ))}
+        </View>
+      </View>
+
+      <TouchableOpacity
+        style={{
+          backgroundColor: '#4CAF50',
+          paddingVertical: 10,
+          borderRadius: 5,
+          alignItems: 'center',
+          opacity: uploading ? 0.5 : 1,
+        }}
+        onPress={handleSubmit}
+        disabled={uploading}
+      >
+        <Text style={{ color: '#fff', fontSize: 16 }}>{uploading ? 'Submitting...' : 'Submit Grievance'}</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
 
-export default GrievanceForm;
+export default Grievance;
