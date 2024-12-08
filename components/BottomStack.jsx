@@ -16,6 +16,7 @@ const BottomStack = () => {
       tabBar={props => <TabBar {...props} />}>
       <Tab.Screen
         name="Home"
+        initialRoute="Home"
         component={HomeScreen}
         options={{
           tabBarIcon: ({focused}) => (

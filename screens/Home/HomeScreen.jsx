@@ -6,21 +6,13 @@ import { useNavigation } from "@react-navigation/native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import DepartmentDirectory from "./DepartmentDirectory";
 import DepartmentInfo from "./DepartmentInfo";
+import AddTask from "../ClassD/AddTask";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
 
   return (
     <ScrollView className="bg-slate-100">
-      {/* Banner */}
-      {/* <View className="mt-4 px-4">
-        <Banner
-          txtSpan1="SAHKAAR"
-          txtSpan2="SETU"
-          desc="Govern Smarter, Govern Better"
-        />
-      </View> */}
-
       {/* Search Bar */}
       <View className="flex justify-center bg-blue-400">
         <View className="flex flex-column items-center gap-4 py-2 px-4">
@@ -67,6 +59,9 @@ const HomeScreen = () => {
         </Text>
         <DepartmentInfo />
       </View>
+
+
+      <AddTask />
 
 
       
