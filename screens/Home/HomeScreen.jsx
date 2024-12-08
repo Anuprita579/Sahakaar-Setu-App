@@ -5,6 +5,7 @@ import MapPlotting from "../../components/MapPlotting";
 import { useNavigation } from "@react-navigation/native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import DepartmentDirectory from "./DepartmentDirectory";
+import DepartmentInfo from "./DepartmentInfo";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -57,6 +58,14 @@ const HomeScreen = () => {
           <Text className="text-sky-700"> Directory</Text>
         </Text>
         <DepartmentDirectory />
+
+      </View>
+      <View className="mt-6 px-4 bg-white rounded-lg py-4">
+        <Text className="text-3xl font-bold text-center text-black mt-10">
+          Department Info Water Supply and sewage
+          {/* <Text className="text-sky-700"> Directory</Text> */}
+        </Text>
+        <DepartmentInfo />
       </View>
 
 
