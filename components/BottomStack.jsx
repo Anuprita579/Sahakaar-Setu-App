@@ -5,7 +5,7 @@ import TabBar from './TabBar';
 import HomeScreen from '../screens/Home/HomeScreen';
 import Documents from '../screens/Home/Documents';
 import MapPlotting from './MapPlotting';
-
+import Tasks from '../screens/Task/Tasks';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +23,17 @@ const BottomStack = () => {
             <MaterialIcons name="home" size={24} color="white"/>
           ),
           tabBarLabel: 'Home',
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Task"
+        component={Tasks}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <MaterialIcons name="task" size={24} color="white"/>
+          ),
+          tabBarLabel: 'Task',
           headerShown: false,
         }}
       />

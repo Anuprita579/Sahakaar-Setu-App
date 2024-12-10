@@ -23,7 +23,7 @@ const TaskShortCard = ({
         style={{ flex: 1, justifyContent: 'center', opacity: 0.2, borderRadius: 8 }}
       >
         <View style={{ ...iconClassName, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name={icon} size={24} color="white" />
+          <Text><Icon name={icon} size={24} color="white" /></Text>
         </View>
         <Text style={{ color: '#2D3748' }}>{title}</Text>
         <Text style={{ fontWeight: 'bold', fontSize: 24 }}>{`${contentNumber}/${totalNumber} Task`}</Text>
@@ -165,7 +165,7 @@ const Tasks = () => {
 
       {/* Filter Section */}
       <View style={{ marginBottom: 16, flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
-        <Icon name="filter" size={24} color="#6B7280" />
+        <Text><Icon name="filter" size={24} color="#6B7280" /></Text>
         <TextInput
           style={{ borderWidth: 1, borderRadius: 4, padding: 8, fontSize: 14, width: 150 }}
           placeholder="Project Name"
@@ -204,7 +204,7 @@ const Tasks = () => {
           padding: 16,
         }}
       >
-        <ScrollView style={{ padding: 16, backgroundColor: '#FFFFFF' }}>
+        <ScrollView style={{ padding: 16, backgroundColor: '#FFFFFF' }} >
       {/* Table Header Row with Horizontal Scroll */}
       <View
         style={{
@@ -239,7 +239,7 @@ const Tasks = () => {
             <Text style={{ color: '#4B5563', minWidth: 100 }}>{project.projectId}</Text>
             <Text style={{ color: '#4B5563', minWidth: 150 }}>{project.projectName}</Text>
             <Text style={{ color: '#4B5563', minWidth: 100 }}>{tasks.taskId}</Text> {/* Use a valid task ID from your data */}
-            <Text style={{ color: '#4B5563', minWidth: 150 }}>{}</Text> {/* Update this to be dynamic */}
+            {/* <Text style={{ color: '#4B5563', minWidth: 150 }}>{}</Text> */}
             <Text style={{ color: '#4B5563', minWidth: 120 }}>2024-08-30</Text> {/* Update with dynamic task start date */}
             <Text style={{ color: '#4B5563', minWidth: 120 }}>2024-09-04</Text> {/* Update with dynamic task deadline */}
             <Text style={{ color: '#4B5563', minWidth: 120 }}>Complete</Text> {/* Update task status */}

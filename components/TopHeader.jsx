@@ -33,9 +33,9 @@ const TopHeader = ({ language, changeLanguage, isLogin,setIsLogin, navigate }) =
     };
 
     return (
-        <View className="flex flex-row bg-sky-950 justify-center pr-10 py-2">
-            <View className="flex-row text-white gap-6 items-center w-4/6">
-                <TouchableOpacity>
+        <View className="flex flex-row bg-sky-950 justify-center py-2">
+            <View className="flex flex-row text-white gap-6 items-center justify-end">
+                {/* <TouchableOpacity>
                     <Text className="text-white">A-</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -43,26 +43,34 @@ const TopHeader = ({ language, changeLanguage, isLogin,setIsLogin, navigate }) =
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <Text className="text-white">A+</Text>
-                </TouchableOpacity>
-
-                {/* Language Selector */}
-                {/* <Picker
-                  selectedValue={language}
-                  onValueChange={(value) => changeLanguage(value)}
-                  style={{ color: "white", backgroundColor: "#0369A1" }}
-                >
-                  <Picker.Item label="English" value="en" />
-                  <Picker.Item label="Marathi" value="mr" />
-                  <Picker.Item label="Hindi" value="hi" />
-                </Picker> */}
+                </TouchableOpacity> */}
 
                 {isLogin ? (
-                    <TouchableOpacity
-                        className="bg-white text-black text-sm py-1 px-3 rounded"
-                        onPress={() => togglePopover(true)} // Toggle popover on click
-                    >
-                        <Text>Welcome back, {isLogin}</Text>
-                    </TouchableOpacity>
+                    <PopoverComponent
+                        open={popoverOpen}
+                        togglePopover={togglePopover}
+                        buttonContent={`Welcome back, ${isLogin}`}
+                        buttonClassName="bg-white text-black py-1 px-3 rounded"
+                        popoverContent={
+                            <FlatList
+                                className="bg-slate-50"
+                                data={[
+                                    { key: "View Profile", action: handleProfileNavigation },
+                                    { key: "Logout", action: handleLogout },
+                                ]}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        onPress={item.action} // Handle click for profile or logout
+                                        className="px-4 py-2 hover:bg-gray-300 rounded"
+                                    >
+                                        <Text className="text-gray-700 text-sm">
+                                            {item.key}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        }
+                    />
                 ) : (
                     <PopoverComponent
                         open={popoverOpen}
@@ -85,34 +93,6 @@ const TopHeader = ({ language, changeLanguage, isLogin,setIsLogin, navigate }) =
                                     >
                                         <Text className="text-gray-700 text-sm">
                                             Login as {item.key}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                        }
-                    />
-                )}
-
-                {isLogin && (
-                    <PopoverComponent
-                        open={popoverOpen}
-                        togglePopover={togglePopover}
-                        buttonContent="Welcome back"
-                        buttonClassName="bg-white text-black py-1 px-3 rounded"
-                        popoverContent={
-                            <FlatList
-                                className="bg-slate-50"
-                                data={[
-                                    { key: "View Profile", action: handleProfileNavigation },
-                                    { key: "Logout", action: handleLogout },
-                                ]}
-                                renderItem={({ item }) => (
-                                    <TouchableOpacity
-                                        onPress={item.action} // Handle click for profile or logout
-                                        className="px-4 py-2 hover:bg-gray-300 rounded"
-                                    >
-                                        <Text className="text-gray-700 text-sm">
-                                            {item.key}
                                         </Text>
                                     </TouchableOpacity>
                                 )}

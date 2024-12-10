@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, Image, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { doc, getDoc } from "firebase/firestore"; // Import Firestore functions
 import { db } from "../../Firebase/config"; // Import Firebase config
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
   const [userData, setUserData] = useState({
@@ -16,6 +17,7 @@ const ProfileScreen = () => {
   });
   const [loading, setLoading] = useState(true); // To manage loading state
   const [error, setError] = useState('');
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -35,7 +37,7 @@ const ProfileScreen = () => {
 
         if (docSnap.exists()) {
           const departmentData = docSnap.data();
-          const employees = departmentData.employees;  // Access employees field
+          const employees = departmentData.employees; // Access employees field
 
           // Check if employee exists
           if (employees && employees[email]) {
@@ -73,71 +75,45 @@ const ProfileScreen = () => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-lg">Loading...</Text>
       </View>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>{error}</Text>
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-red-600 text-lg text-center">{error}</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.profileContainer}>
-        <Image source={{ uri: 'your-image-url' }} style={styles.profileImage} />
-        <Text style={styles.profileText}>Name: {userData.name}</Text>
-        <Text style={styles.profileText}>Email: {userData.email}</Text>
-        <Text style={styles.profileText}>Role: {userData.role}</Text>
-        <Text style={styles.profileText}>Phone: {userData.phone}</Text>
-        <Text style={styles.profileText}>Gender: {userData.gender}</Text>
-        <Text style={styles.profileText}>Hire Date: {userData.hireDate}</Text>
-        <Text style={styles.profileText}>Designation: {userData.designation}</Text>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View className="flex-1 justify-center items-center pt-5">
+        <View className="w-4/5 bg-white p-5 rounded-lg shadow-md mb-5">
+          <Image
+            source={{ uri: 'https://p7.hiclipart.com/preview/442/17/110/computer-icons-user-profile-male-user-thumbnail.jpg' }}
+            className="w-24 h-24 rounded-full self-center mb-5"
+          />
+          <Text className="text-lg mb-2 text-gray-700">Name: {userData.name}</Text>
+          <Text className="text-lg mb-2 text-gray-700">Email: {userData.email}</Text>
+          <Text className="text-lg mb-2 text-gray-700">Role: {userData.role}</Text>
+          <Text className="text-lg mb-2 text-gray-700">Phone: {userData.phone}</Text>
+          <Text className="text-lg mb-2 text-gray-700">Gender: {userData.gender}</Text>
+          <Text className="text-lg mb-2 text-gray-700">Hire Date: {userData.hireDate || "N/A"}</Text>
+          <Text className="text-lg mb-2 text-gray-700">Designation: {userData.designation}</Text>
+          <TouchableOpacity className="bg-teal-400 py-2 px-4" onPress={() => navigation.navigate("DepartmentInfo")}>
+            <Text> View Department Information</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+
+      
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 20,
-  },
-  profileContainer: {
-    width: '80%',
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    marginBottom: 20,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    alignSelf: 'center',
-    marginBottom: 20,
-  },
-  profileText: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: '#333',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 18,
-    textAlign: 'center',
-  },
-});
 
 export default ProfileScreen;

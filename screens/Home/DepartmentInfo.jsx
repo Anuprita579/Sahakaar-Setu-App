@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Alert, StyleSheet } from "react-native";
+import { View, Text, Alert, StyleSheet, ScrollView } from "react-native";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../Firebase/config"; // Ensure your Firestore setup is correct
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
@@ -68,7 +68,7 @@ export default function DepartmentInfo() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} className="py-10">
       <Text style={styles.title}>{departmentData?.departmentName}</Text>
 
       <Text style={styles.label}>Accessibility:</Text>
@@ -100,7 +100,7 @@ export default function DepartmentInfo() {
 
       <Text style={styles.label}>Services Provided:</Text>
       <Text>{departmentData?.servicesProvided}</Text>
-    </View>
+    </ScrollView>
   );
 }
 
