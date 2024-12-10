@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert,Image } from 'react-native';
 import { db } from '../../Firebase/config';  // Update with your Firebase config
 import { doc, getDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation
+import LogoImage from '../../assets/images/Logo.png';
+
 
 
 export default function Login() {
@@ -35,6 +37,7 @@ export default function Login() {
           // If citizen exists and passwords match, store email in AsyncStorage
           await AsyncStorage.setItem('email', email);
           await AsyncStorage.setItem('name', citizen.Name);
+          await AsyncStorage.setItem('type', "citizen");
           Alert.alert('Login Successful', 'Welcome back!');
           navigation.navigate("BottomStack");
           // Navigate to the home screen or dashboard (you can use react-navigation here)
@@ -53,7 +56,14 @@ export default function Login() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f8f8f8' }}>
       <View style={{ width: '80%', padding: 20, backgroundColor: 'white', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3 }}>
+      <View style={{ alignItems: "center", marginBottom: 20 }}>
+            <Image source={LogoImage} style={{ width: 80, height: 80, borderRadius: 40 }} />
+          </View>
+          <Text style={{ fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20 }}>Login to Your Account</Text>
+
         <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 }}>Login</Text>
+      
+
 
         {/* Error Message */}
         {error && <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>{error}</Text>}

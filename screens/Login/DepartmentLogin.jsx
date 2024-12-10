@@ -77,13 +77,13 @@ export default function DepartmentLogin() {
           <TextInput placeholder="Enter Email Address" value={email} onChangeText={setEmail} style={{ borderWidth: 1, borderColor: "#d1d5db", borderRadius: 8, padding: 10, marginBottom: 10 }} />
           <TextInput placeholder="Enter Password" value={password} onChangeText={setPassword} secureTextEntry style={{ borderWidth: 1, borderColor: "#d1d5db", borderRadius: 8, padding: 10, marginBottom: 10 }} />
 
-          <View style={{ borderWidth: 1, borderColor: "#d1d5db", borderRadius: 8, marginBottom: 10, backgroundColor: "white", justifyContent: "center", height: 50 }}>
+          {/* <View style={{ borderWidth: 1, borderColor: "#d1d5db", borderRadius: 8, marginBottom: 10, backgroundColor: "white", justifyContent: "center", height: 50 }}>
             <Picker selectedValue={role} onValueChange={(itemValue) => setRole(itemValue)} style={{ color: "#374151", height: 50, paddingHorizontal: 10 }} dropdownIconColor="#374151">
               <Picker.Item label="Platform Admin" value="Admin" />
               <Picker.Item label="Department Employee" value="Expert" />
               <Picker.Item label="Department Head" value="Head" />
             </Picker>
-          </View>
+          </View> */}
 
           {role !== "Admin" && (
             <View style={{ borderWidth: 1, borderColor: "#d1d5db", borderRadius: 8, marginBottom: 10, backgroundColor: "white", justifyContent: "center", height: 50 }}>

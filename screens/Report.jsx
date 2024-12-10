@@ -150,7 +150,7 @@ const Report = () => {
     };
 
     return (
-        <ScrollView style={{ flex: 1, padding: 16, backgroundColor: 'white' }}>
+        <ScrollView style={{ flex: 1, padding: 16, margn:3, backgroundColor: 'white' }}>
             <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 16 }}>Report Form</Text>
 
             {/* Worker Name Field */}
@@ -274,7 +274,7 @@ const Report = () => {
             </View>
 
             {/* Submit Button */}
-            <Button title="Submit" onPress={handleSubmit} />
+            <Button style= {{marginBottom: 16 }} title="Submit" onPress={handleSubmit} />
         </ScrollView>
     );
 };

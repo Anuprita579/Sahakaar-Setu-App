@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'; // Import FontAwesome 
 import { db } from '../../Firebase/config'; // Ensure Firebase is configured
 import { doc, getDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Report from "../Report"
 
 const TaskShortCard = ({
   backgroundImgLink,
@@ -248,7 +249,11 @@ const Tasks = () => {
       </ScrollView>
     </ScrollView>
       </View>
+      <Report/>
     </ScrollView>
+
+
+    
   );
 };
 

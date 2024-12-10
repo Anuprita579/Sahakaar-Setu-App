@@ -13,7 +13,7 @@ const BelowHeader = ({ anchorEl, setAnchorEl }) => {
       <View className="flex flex-column items-center gap-4 py-2 px-4">
         {/* Logo and Title */}
         <TouchableOpacity
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("BottomStack")}
           className="flex flex-row items-center"
         >
           <View className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-4">

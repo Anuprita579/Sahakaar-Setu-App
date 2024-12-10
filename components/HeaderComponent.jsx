@@ -5,11 +5,9 @@ import BelowHeader from "./BelowHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-
 const HeaderComponent = () => {
   const navigation = useNavigation();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isLogin, setIsLogin] = useState("Login");
+  const [userName, setUserName] = useState(null);
   const [language, setLanguage] = useState("en");
 
   // Retrieve data from AsyncStorage on component mount
@@ -18,8 +16,8 @@ const HeaderComponent = () => {
       const storedLanguage = await AsyncStorage.getItem("language");
       setLanguage(storedLanguage || "en");
 
-      const userName = await AsyncStorage.getItem("userName");
-      setIsLogin(userName); // Boolean indicating if user is logged in
+      const storedUserName = await AsyncStorage.getItem("userName");
+      setUserName(storedUserName || "Login"); // Set a default value ("Login") if no userName
     };
 
     fetchData();
@@ -38,19 +36,18 @@ const HeaderComponent = () => {
   };
 
   return (
-    <View >
+    <View>
       <TopHeader
         language={language}
         changeLanguage={changeLanguage}
-        isLogin={isLogin}
-        setIsLogin={setIsLogin}
+        userName={userName}
+        setUserName={setUserName}
         navigate={navigation.navigate}
       />
       <BelowHeader
-        anchorEl={anchorEl}
-        setAnchorEl={setAnchorEl}
+        userName={userName}
         navigate={navigation.navigate}
-      /> 
+      />
     </View>
   );
 };

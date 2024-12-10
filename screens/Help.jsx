@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, Alert, FlatList, ScrollView } from 'react-native';
 import { collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../Firebase/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker'; // Correct Picker import
 
-const HelpPage = () => {
+const Help = () => {
   const [questions, setQuestions] = useState([]);
   const [question, setQuestion] = useState('');
   const [department, setDepartment] = useState('');
@@ -79,7 +79,7 @@ const HelpPage = () => {
   );
 
   return (
-    <View style={{ maxWidth: 800, marginHorizontal: 'auto', padding: 24, backgroundColor: 'white', shadowRadius: 4, borderRadius: 12 }}>
+    <ScrollView style={{ maxWidth: 800, marginHorizontal: 'auto', padding: 24, backgroundColor: 'white', shadowRadius: 4, borderRadius: 12 }}>
       {/* Heading Banner */}
       <View style={{ display: 'flex', alignItems: 'center', paddingVertical: 40, position: 'relative', backgroundColor: '#FFFAE5', paddingHorizontal: 32 }}>
         <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1E40AF' }}>
@@ -162,8 +162,8 @@ const HelpPage = () => {
           />
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
-export default HelpPage;
+export default Help;
