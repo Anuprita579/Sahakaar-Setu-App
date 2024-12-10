@@ -12,6 +12,7 @@ import Profile from "../screens/Profile/Profile";
 import CitizenLogin from "../screens/Login/CitizenLogin";
 import DepartmentInfo from "../screens/Home/DepartmentInfo";
 import Tasks from "../screens/Task/Tasks";
+// import ReportForm from "../screens/ClassD/ReportForm";
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,7 @@ export default function Index() {
           <Stack.Screen name="DepartmentInfo" component={DepartmentInfo} />
           <Stack.Screen name="Tasks" component={Tasks} />
 
+          {/* <Stack.Screen name="ReportForm" component={ReportForm} /> */}
 
         </Stack.Navigator>
 

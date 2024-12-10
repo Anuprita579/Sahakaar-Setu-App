@@ -7,13 +7,15 @@ import DepartmentInfo from "./DepartmentInfo";
 import AddTask from "../ClassD/AddTask";
 import Tasks from "../Task/Tasks";
 import Grievance from "../Grievance/Grievance";
+import Report from "../Report";
+import Help from "../Help"
 
 const HomeScreen = () => {
 
   return (
     <ScrollView className="bg-slate-100">
       {/* Search Bar */}
-      <View className="flex justify-center bg-blue-400">
+      {/* <View className="flex justify-center bg-blue-400">
         <View className="flex flex-column items-center gap-4 py-2 px-4">
           <View className="flex flex-row items-center bg-sky-950 rounded mb-2">
             <TextInput
@@ -31,7 +33,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </View> */}
 
       {/* News Section */}
       <View className="mt-6 px-4 bg-slate-100 rounded-lg py-4">
@@ -54,7 +56,7 @@ const HomeScreen = () => {
 
       <View className="mt-6 px-4 bg-white rounded-lg py-4">
         <Text className="text-3xl font-bold text-center text-black mt-10">
-          Tasks
+          Tasks 
           {/* <Text className="text-sky-700"> Directory</Text> */}
         </Text>
         <Tasks />
@@ -68,7 +70,10 @@ const HomeScreen = () => {
         <Grievance/>
       </View>
 
+
       <AddTask />
+      <Report/>
+      <Help/>
 
 
       
