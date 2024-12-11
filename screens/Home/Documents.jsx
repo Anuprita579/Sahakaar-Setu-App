@@ -12,6 +12,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
+import { useNavigation } from "@react-navigation/native";
 
 // Fallback for CameraType
 const CameraType = {
@@ -28,6 +29,7 @@ const Documents = () => {
   const [taskCompleted, setTaskCompleted] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [permission, requestPermission] = useCameraPermissions();
+  const navigation = useNavigation();
 
   if (!permission) {
     return (
@@ -87,6 +89,7 @@ const Documents = () => {
       "Form Submitted",
       "Your document details have been submitted successfully!"
     );
+    navigation.navigate("BottomStack")
   };
 
   return (

@@ -123,7 +123,7 @@ const Report = () => {
                 }
             }, { merge: true }); // Merge with the existing document to avoid overwriting other reports
 
-            Alert.alert("Submitted successfully");
+            Alert.alert("Submitted successfully", );
 
             console.log('Report submitted successfully!');
             setWorkerName('');
@@ -278,7 +278,7 @@ const Report = () => {
             </View>
 
             {/* Submit Button */}
-            <Button style= {{marginBottom: 16 }} title="Submit" onPress={handleSubmit} />
+            <Button className="mb-20" title="Submit" onPress={handleSubmit} />
         </ScrollView>
     );
 };
