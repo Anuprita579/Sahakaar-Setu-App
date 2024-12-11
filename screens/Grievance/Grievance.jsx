@@ -109,7 +109,7 @@ const Grievance = () => {
       setUploading(false);
       Alert.alert('Error', 'Failed to submit grievance. Please try again.');
     }
-  };
+  }
 
   return (
     <ScrollView style={{ padding: 20 }}>
@@ -122,6 +122,8 @@ const Grievance = () => {
           placeholder="Enter your name"
           value={userName}
           onChangeText={setUserName}
+          editable={false}
+          className="bg-gray-300"
         />
       </View>
 
@@ -132,6 +134,8 @@ const Grievance = () => {
           placeholder="Enter your email"
           value={email}
           onChangeText={setEmail}
+          editable={false}
+          className="bg-gray-300"
         />
       </View>
 
@@ -216,6 +220,7 @@ const Grievance = () => {
         }}
         onPress={handleSubmit}
         disabled={uploading}
+        className="mb-10"
       >
         <Text style={{ color: '#fff', fontSize: 16 }}>{uploading ? 'Submitting...' : 'Submit Grievance'}</Text>
       </TouchableOpacity>

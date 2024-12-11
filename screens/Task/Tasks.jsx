@@ -194,7 +194,7 @@ const Tasks = () => {
       </View>
 
       {/* Table Section */}
-      <View
+      <ScrollView
         style={{
           backgroundColor: '#FFFFFF',
           borderRadius: 8,
@@ -204,6 +204,7 @@ const Tasks = () => {
           overflowX: 'auto',
           padding: 16,
         }}
+        horontal={true}
       >
         <ScrollView style={{ padding: 16, backgroundColor: '#FFFFFF' }} >
       {/* Table Header Row with Horizontal Scroll */}
@@ -240,7 +241,6 @@ const Tasks = () => {
             <Text style={{ color: '#4B5563', minWidth: 100 }}>{project.projectId}</Text>
             <Text style={{ color: '#4B5563', minWidth: 150 }}>{project.projectName}</Text>
             <Text style={{ color: '#4B5563', minWidth: 100 }}>{tasks.taskId}</Text> {/* Use a valid task ID from your data */}
-            {/* <Text style={{ color: '#4B5563', minWidth: 150 }}>{}</Text> */}
             <Text style={{ color: '#4B5563', minWidth: 120 }}>2024-08-30</Text> {/* Update with dynamic task start date */}
             <Text style={{ color: '#4B5563', minWidth: 120 }}>2024-09-04</Text> {/* Update with dynamic task deadline */}
             <Text style={{ color: '#4B5563', minWidth: 120 }}>Complete</Text> {/* Update task status */}
@@ -248,12 +248,72 @@ const Tasks = () => {
         ))}
       </ScrollView>
     </ScrollView>
+      </ScrollView>
+
+
+
+      {/* Table Section */}
+      <ScrollView
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: 8,
+          shadowColor: '#000000',
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          overflowX: 'auto',
+          padding: 16,
+        }}
+        horontal={true}
+      >
+        <ScrollView style={{ padding: 16, backgroundColor: '#FFFFFF' }} >
+      {/* Table Header Row with Horizontal Scroll */}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingVertical: 8,
+          borderBottomWidth: 1,
+        }}
+      >
+        <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#4B5563' }}>Project Id</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#4B5563' }}>Project Name</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#4B5563' }}>Task Id</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#4B5563' }}>Task Name</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#4B5563' }}>Task Start Date</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#4B5563' }}>Task Deadline</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#4B5563' }}>Task Status</Text>
       </View>
+
+      {/* Horizontal Scroll for the rows */}
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        {filteredData.map((project) => (
+          <View
+            key={project.projectId}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingVertical: 8,
+              borderBottomWidth: 1,
+            }}
+          >
+            {/* Add the task data dynamically */}
+            <Text style={{ color: '#4B5563', minWidth: 100 }}>{project.projectId}</Text>
+            <Text style={{ color: '#4B5563', minWidth: 150 }}>{project.projectName}</Text>
+            <Text style={{ color: '#4B5563', minWidth: 100 }}>{tasks.taskId}</Text> {/* Use a valid task ID from your data */}
+            <Text style={{ color: '#4B5563', minWidth: 120 }}>2024-08-30</Text> {/* Update with dynamic task start date */}
+            <Text style={{ color: '#4B5563', minWidth: 120 }}>2024-09-04</Text> {/* Update with dynamic task deadline */}
+            <Text style={{ color: '#4B5563', minWidth: 120 }}>Complete</Text> {/* Update task status */}
+          </View>
+        ))}
+      </ScrollView>
+    </ScrollView>
+      </ScrollView>
+      
+
+
+
       <Report/>
     </ScrollView>
-
-
-    
   );
 };
 

@@ -113,11 +113,11 @@ const Help = () => {
 
         {/* Department dropdown */}
         <Text style={{ marginTop: 8, fontSize: 12, fontWeight: '500', color: '#4B5563' }}>Choose Department (Optional)</Text>
-        <View style={{ marginTop: 8 }}>
+        <View className= "border-2 border-gray-200 p-0 mb-7 mt-2 rounded-lg">
           <Picker
             selectedValue={department}
             onValueChange={setDepartment}
-            style={{ width: '100%', borderRadius: 8, borderWidth: 1, borderColor: '#D1D5DB', padding: 8, fontSize: 14 }}
+            style={{ width: '100%', borderRadius: 8, borderWidth: 1, borderColor: '#D1D5DB', fontSize: 14 }}
           >
             <Picker.Item label="None" value="" />
             {departments.map((dept, index) => (

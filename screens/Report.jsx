@@ -161,6 +161,8 @@ const Report = () => {
                     placeholder="Enter worker's name"
                     value={workerName}
                     onChangeText={setWorkerName}
+                    editable={false}
+                    className="bg-gray-300"
                 />
             </View>
 
@@ -172,6 +174,8 @@ const Report = () => {
                     placeholder="Enter worker's email"
                     value={workerEmail}
                     onChangeText={setWorkerEmail}
+                    className="bg-gray-300"
+                    editable={false}
                 />
             </View>
 
