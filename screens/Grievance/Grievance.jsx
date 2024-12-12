@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CameraView, useCameraPermissions } from "expo-camera";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from 'expo-location';
-import { SafeAreaView } from 'react-native-safe-area-context'
+// import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Fallback for CameraType
 const CameraType = {
@@ -94,6 +94,12 @@ const getCurrentLocation = async () => {
       console.log('Latitude:', latitude, 'Longitude:', longitude);
       setLatitude(latitude);
       setLongitude(longitude);
+      // const results = await Location.reverseGeocodeAsync({ latitude, longitude });
+      // console.log(`Reverse Geocoded Address: ${results[0]}`);
+      const testCoords = { latitude: 37.7749, longitude: -122.4194 }; // San Francisco
+      const results = await Location.reverseGeocodeAsync(testCoords);
+      console.log(`Test Address: ${results[0]}`);
+
 
       // Multiple geocoding attempts
       // try {
@@ -443,27 +449,33 @@ useEffect(() => {
 
       {/* camera */}
       <View className="flex-1 h-60">
-        <CameraView
-          ref={cameraRef} 
-          style={{ flex: 1 }}
-          facing={cameraType}
-        >
-          <View className="absolute bottom-0 left-0 right-0 flex flex-row justify-center items-center mb-4 gap-5">
-            <TouchableOpacity
-              className="bg-blue-500 p-3 rounded"
-              onPress={toggleCameraType}
-            >
-              <Text className="text-white">Flip Camera</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="bg-green-500 p-3 rounded"
-              onPress={handleCapture}
-            >
-              <Text className="text-white">Capture Photo</Text>
-            </TouchableOpacity>
+      <CameraView
+        ref={cameraRef}
+        style={{ flex: 1 }}
+        type={cameraType}
+      >
+        <View className="absolute bottom-0 left-0 right-0 flex flex-row justify-start ml-4 items-center mb-4 gap-5">
+          <TouchableOpacity
+            className="bg-blue-500 p-3 rounded"
+            onPress={toggleCameraType}
+          >
+            <Text className="text-white">Flip Camera</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-green-500 p-3 rounded"
+            onPress={handleCapture}
+          >
+            <Text className="text-white">Capture Photo</Text>
+          </TouchableOpacity>
+        </View>
+        {latitude && longitude && (
+          <View className="absolute bottom-4 right-4 bg-white p-2 rounded">
+            <Text className="text-xs font-bold">Lat: {latitude.toFixed(6)}</Text>
+            <Text className="text-xs font-bold">Lon: {longitude.toFixed(6)}</Text>
           </View>
-        </CameraView>
-      </View>
+        )}
+      </CameraView>
+    </View>
 
       {/* Display Captured Photos */}
       <ScrollView className="flex flex-row h-40 mt-2" horizontal={true}>
@@ -507,6 +519,7 @@ useEffect(() => {
       >
         <Text style={{ color: '#fff', fontSize: 16 }}>{uploading ? 'Submitting...' : 'Submit Grievance'}</Text>
       </TouchableOpacity>
+
     </ScrollView>
   );
 };
