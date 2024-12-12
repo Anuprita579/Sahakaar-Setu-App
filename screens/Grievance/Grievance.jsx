@@ -410,12 +410,12 @@ useEffect(() => {
         onChangeText={setLocation}
       />
       {latitude && longitude ? (
-    <>
+    <View className="py-4">
       <Text className="font-semibold underline">Current Latitude:</Text>
       <Text>{latitude}</Text>
       <Text className="font-semibold underline">Current Longitude:</Text>
       <Text>{longitude}</Text>
-    </>
+    </View>
   ) : (
     <Text>No location data available yet.</Text>)}
       </View>`
