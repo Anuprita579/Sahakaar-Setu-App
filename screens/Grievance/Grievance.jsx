@@ -38,6 +38,8 @@ const Grievance = () => {
   //location
   const [location, setLocation] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [latitude, setLatitude] = useState(null);
+const [longitude, setLongitude] = useState(null);
 
 
 const getCurrentLocation = async () => {
@@ -90,6 +92,8 @@ const getCurrentLocation = async () => {
     if (coords) {
       const { latitude, longitude } = coords;
       console.log('Latitude:', latitude, 'Longitude:', longitude);
+      setLatitude(latitude);
+      setLongitude(longitude);
 
       // Multiple geocoding attempts
       // try {
@@ -135,10 +139,6 @@ const getCurrentLocation = async () => {
       //   setDisplayCurrentAddress(`Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
       //   setErrorMsg(`Geocoding failed: ${geocodeError.message}`);
       // }
-      setTimeout(() => {
-        setLocation('Gandhinagar');
-        setErrorMsg('');
-      }, 2000)
     }
   } catch (error) {
     console.error('Location Retrieval Error:', error);
@@ -404,12 +404,20 @@ useEffect(() => {
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Location</Text>
         <TextInput
-        placeholder="Detecting location..."
+        style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+        placeholder="Enter address"
         value={location}
         onChangeText={setLocation}
-        editable={false}
-        className="bg-gray-300 mb-4 rounded-lg"
       />
+      {latitude && longitude ? (
+    <>
+      <Text className="font-semibold underline">Current Latitude:</Text>
+      <Text>{latitude}</Text>
+      <Text className="font-semibold underline">Current Longitude:</Text>
+      <Text>{longitude}</Text>
+    </>
+  ) : (
+    <Text>No location data available yet.</Text>)}
       </View>`
 
       <View style={{ marginBottom: 15 }}>
