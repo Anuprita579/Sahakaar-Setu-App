@@ -1,14 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Button, Image, Alert, ScrollView, Platform } from 'react-native';
-import { collection, addDoc, getDocs, doc } from 'firebase/firestore';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { v4 as uuidv4 } from 'uuid';
-import { db, storage } from '../../Firebase/config';
-import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Button,
+  Image,
+  Alert,
+  ScrollView,
+  Platform,
+} from "react-native";
+import { collection, addDoc, getDocs, doc } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { db, storage } from "../../Firebase/config";
+import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 // import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Fallback for CameraType
@@ -18,16 +28,16 @@ const CameraType = {
 };
 
 const Grievance = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [departments, setDepartments] = useState([]);
-  const [department, setDepartment] = useState('');
-  const [grievanceType, setGrievanceType] = useState('');
+  const [department, setDepartment] = useState("");
+  const [grievanceType, setGrievanceType] = useState("");
   // const [location, setLocation] = useState('');
   const [latlon, setLatlon] = useState([null, null]);
-  const [priority, setPriority] = useState('');
-  const [description, setDescription] = useState('');
+  const [priority, setPriority] = useState("");
+  const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
   //camera
@@ -39,174 +49,181 @@ const Grievance = () => {
   const [location, setLocation] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [latitude, setLatitude] = useState(null);
-const [longitude, setLongitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
-
-const getCurrentLocation = async () => {
-  try {
-    // Reset error message
-    setErrorMsg(null);
-
-    // Request permissions with both foreground and background
-    let { status: foregroundStatus } = await Location.requestForegroundPermissionsAsync();
-    
-    // Additional check for background permissions on Android
-    if (Platform.OS === 'android') {
-      let { status: backgroundStatus } = await Location.requestBackgroundPermissionsAsync();
-      if (backgroundStatus !== 'granted') {
-        console.log('Background location permission not granted');
-      }
-    }
-
-    console.log('Foreground Permission Status:', foregroundStatus);
-
-    if (foregroundStatus !== 'granted') {
-      Alert.alert(
-        'Permission denied', 
-        'Allow the app to use location services', 
-        [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK', 
-            onPress: () => console.log('OK Pressed')
-          },
-        ]
-      );
-      setDisplayCurrentAddress('Location access denied');
-      return;
-    }
-
-    // Get current position with multiple fallback strategies
-    const { coords } = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Balanced, // Try balanced accuracy
-      timeout: 30000,
-      maximumAge: 10000
+  const timeout = (ms, promise) => {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error("Request timed out")), ms);
+      promise
+        .then((result) => {
+          clearTimeout(timer);
+          resolve(result);
+        })
+        .catch((err) => {
+          clearTimeout(timer);
+          reject(err);
+        });
     });
-
-    console.log('Coordinates:', coords);
-
-    if (coords) {
-      const { latitude, longitude } = coords;
-      console.log('Latitude:', latitude, 'Longitude:', longitude);
-      setLatitude(latitude);
-      setLongitude(longitude);
-      // const results = await Location.reverseGeocodeAsync({ latitude, longitude });
-      // console.log(`Reverse Geocoded Address: ${results[0]}`);
-      const testCoords = { latitude: 37.7749, longitude: -122.4194 }; // San Francisco
-      const results = await Location.reverseGeocodeAsync(testCoords);
-      console.log(`Test Address: ${results[0]}`);
-
-
-      // Multiple geocoding attempts
-      // try {
-      //   // First attempt: Standard Expo Location Geocoding
-      //   const response = await Location.reverseGeocodeAsync(
-      //     { latitude, longitude },
-      //     { useGoogleMaps: false, timeout: 30000 }
-      //   );
-      //   console.log("response of geocoding: ", response);
-
-      //   console.log('Geocode Response:', JSON.stringify(response, null, 2));
-
-      //   if (response && response.length > 0) {
-      //     // Create a comprehensive address string with multiple fallback options
-      //     const firstAddress = response[0];
-      //     const addressParts = [
-      //       firstAddress.name,
-      //       firstAddress.street,
-      //       firstAddress.district,
-      //       firstAddress.city,
-      //       firstAddress.region,
-      //       firstAddress.country,
-      //       firstAddress.postalCode
-      //     ].filter(Boolean);
-
-      //     const formattedAddress = addressParts.join(', ');
-          
-      //     setDisplayCurrentAddress(formattedAddress || `Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-      //   } else {
-      //     // Fallback if no address found
-      //     setDisplayCurrentAddress(`Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-      //     setErrorMsg('No address details found');
-      //   }
-      // } catch (geocodeError) {
-      //   console.error('Reverse Geocoding Error:', geocodeError);
-        
-      //   // Detailed error logging
-      //   console.log('Error Name:', geocodeError.name);
-      //   console.log('Error Message:', geocodeError.message);
-      //   console.log('Error Stack:', geocodeError.stack);
-
-      //   // Fallback error handling
-      //   setDisplayCurrentAddress(`Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-      //   setErrorMsg(`Geocoding failed: ${geocodeError.message}`);
-      // }
-    }
-  } catch (error) {
-    console.error('Location Retrieval Error:', error);
-    
-    // Comprehensive error handling
-    if (error.code === 'E_LOCATION_SERVICES_DISABLED') {
-      setErrorMsg('Location services are disabled');
-      setDisplayCurrentAddress('Location services disabled');
-    } else {
-      setErrorMsg(`Location Error: ${error.message}`);
-      setDisplayCurrentAddress('Location detection failed');
-    }
-
-    // Log additional error details
-    console.log('Error Name:', error.name);
-    console.log('Error Code:', error.code);
-    console.log('Error Message:', error.message);
-  }
-};
-useEffect(() => {
-  getCurrentLocation();
-}, []);
-
-const checkIfLocationEnabled = async () => {
-  try {
-    let enabled = await Location.hasServicesEnabledAsync();
-    console.log('Location Services Enabled:', enabled);
-
-    if (!enabled) {
-      Alert.alert(
-        'Location not enabled', 
-        'Please enable your Location', 
-        [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK', 
-            onPress: () => console.log('OK Pressed')
-          },
-        ]
-      );
-      setLocationServicesEnabled(false);
-    } else {
-      setLocationServicesEnabled(true);
-    }
-  } catch (error) {
-    console.error('Error checking location services:', error);
-    setLocationServicesEnabled(false);
-  }
-};
-
-useEffect(() => {
-  const initializeLocation = async () => {
-    await checkIfLocationEnabled();
-    await getCurrentLocation();
   };
 
-  initializeLocation();
-}, []);
+  const getCurrentLocation = async () => {
+    try {
+      // Reset error message
+      setErrorMsg(null);
+
+      // Request permissions with both foreground and background
+      let { status: foregroundStatus } = await Location.requestForegroundPermissionsAsync();
+
+      // Additional check for background permissions on Android
+      if (Platform.OS === "android") {
+        let { status: backgroundStatus } =
+          await Location.requestBackgroundPermissionsAsync();
+        if (backgroundStatus !== "granted") {
+          console.log("Background location permission not granted");
+        }
+      }
+
+      console.log("Foreground Permission Status:", foregroundStatus);
+
+      if (foregroundStatus !== "granted") {
+        Alert.alert(
+          "Permission denied",
+          "Allow the app to use location services",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            {
+              text: "OK",
+              onPress: () => console.log("OK Pressed"),
+            },
+          ]
+        );
+        setDisplayCurrentAddress("Location access denied");
+        return;
+      }
+
+      // Get current position with multiple fallback strategies
+      const { coords } = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced, // Try balanced accuracy
+        timeout: 30000,
+        maximumAge: 10000,
+      });
+
+      console.log("Coordinates:", coords);
+
+      if (coords) {
+        const { latitude, longitude } = coords;
+        console.log("Latitude:", latitude, "Longitude:", longitude);
+        setLatitude(latitude);
+        setLongitude(longitude);
+        const results = await Location.reverseGeocodeAsync({ latitude, longitude });
+        console.log(`Reverse Geocoded Address: ${results[0]}`);
+
+        // Multiple geocoding attempts
+        // try {
+        //   // First attempt: Standard Expo Location Geocoding
+        //   const response = await Location.reverseGeocodeAsync(
+        //     { latitude, longitude },
+        //     { useGoogleMaps: false, timeout: 30000 }
+        //   );
+        //   console.log("response of geocoding: ", response);
+
+        //   console.log('Geocode Response:', JSON.stringify(response, null, 2));
+
+        //   if (response && response.length > 0) {
+        //     // Create a comprehensive address string with multiple fallback options
+        //     const firstAddress = response[0];
+        //     const addressParts = [
+        //       firstAddress.name,
+        //       firstAddress.street,
+        //       firstAddress.district,
+        //       firstAddress.city,
+        //       firstAddress.region,
+        //       firstAddress.country,
+        //       firstAddress.postalCode
+        //     ].filter(Boolean);
+
+        //     const formattedAddress = addressParts.join(', ');
+
+        //     setDisplayCurrentAddress(formattedAddress || `Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+        //   } else {
+        //     // Fallback if no address found
+        //     setDisplayCurrentAddress(`Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+        //     setErrorMsg('No address details found');
+        //   }
+        // } catch (geocodeError) {
+        //   console.error('Reverse Geocoding Error:', geocodeError);
+
+        //   // Detailed error logging
+        //   console.log('Error Name:', geocodeError.name);
+        //   console.log('Error Message:', geocodeError.message);
+        //   console.log('Error Stack:', geocodeError.stack);
+
+        //   // Fallback error handling
+        //   setDisplayCurrentAddress(`Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+        //   setErrorMsg(`Geocoding failed: ${geocodeError.message}`);
+        // }
+      }
+    } catch (error) {
+      console.error("Location Retrieval Error:", error);
+
+      // Comprehensive error handling
+      if (error.code === "E_LOCATION_SERVICES_DISABLED") {
+        setErrorMsg("Location services are disabled");
+        setDisplayCurrentAddress("Location services disabled");
+      } else {
+        setErrorMsg(`Location Error: ${error.message}`);
+        setDisplayCurrentAddress("Location detection failed");
+      }
+
+      // Log additional error details
+      console.log("Error Name:", error.name);
+      console.log("Error Code:", error.code);
+      console.log("Error Message:", error.message);
+    }
+  };
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
+
+  const checkIfLocationEnabled = async () => {
+    try {
+      let enabled = await Location.hasServicesEnabledAsync();
+      console.log("Location Services Enabled:", enabled);
+
+      if (!enabled) {
+        Alert.alert("Location not enabled", "Please enable your Location", [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => console.log("OK Pressed"),
+          },
+        ]);
+        setLocationServicesEnabled(false);
+      } else {
+        setLocationServicesEnabled(true);
+      }
+    } catch (error) {
+      console.error("Error checking location services:", error);
+      setLocationServicesEnabled(false);
+    }
+  };
+
+  useEffect(() => {
+    const initializeLocation = async () => {
+      await checkIfLocationEnabled();
+      await getCurrentLocation();
+    };
+
+    initializeLocation();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -216,13 +233,13 @@ useEffect(() => {
       setDepartments(departmentsList);
 
       // Fetch user details from AsyncStorage
-      const storedUserName = await AsyncStorage.getItem('name');
-      const storedEmail = await AsyncStorage.getItem('email');
-      const storedLat = await AsyncStorage.getItem('lat');
-      const storedLon = await AsyncStorage.getItem('lon');
-      
-      setUserName(storedUserName || '');
-      setEmail(storedEmail || '');
+      const storedUserName = await AsyncStorage.getItem("name");
+      const storedEmail = await AsyncStorage.getItem("email");
+      const storedLat = await AsyncStorage.getItem("lat");
+      const storedLon = await AsyncStorage.getItem("lon");
+
+      setUserName(storedUserName || "");
+      setEmail(storedEmail || "");
       setLatlon([storedLat, storedLon]);
     };
     fetchData();
@@ -246,7 +263,10 @@ useEffect(() => {
     try {
       const imageUrls = await Promise.all(
         images.map(async (image) => {
-          const imageRef = ref(storage, `grievances/${uuidv4()}_${image.fileName}`);
+          const imageRef = ref(
+            storage,
+            `grievances/${uuidv4()}_${image.fileName}`
+          );
           const uploadTask = uploadBytesResumable(imageRef, {
             uri: image.uri,
             type: image.type,
@@ -254,7 +274,12 @@ useEffect(() => {
           });
 
           await new Promise((resolve, reject) => {
-            uploadTask.on('state_changed', null, (error) => reject(error), () => resolve());
+            uploadTask.on(
+              "state_changed",
+              null,
+              (error) => reject(error),
+              () => resolve()
+            );
           });
 
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
@@ -276,27 +301,30 @@ useEffect(() => {
         timestamp: new Date(),
       };
 
-      const departmentDocRef = doc(db, 'departments', department);
-      const grievancesCollectionRef = collection(departmentDocRef, 'grievances');
+      const departmentDocRef = doc(db, "departments", department);
+      const grievancesCollectionRef = collection(
+        departmentDocRef,
+        "grievances"
+      );
       await addDoc(grievancesCollectionRef, grievanceData);
 
       setUploading(false);
 
       // Reset form after submission
-      setPhone('');
-      setDepartment('');
-      setGrievanceType('');
-      setLocation('');
-      setPriority('');
-      setDescription('');
+      setPhone("");
+      setDepartment("");
+      setGrievanceType("");
+      setLocation("");
+      setPriority("");
+      setDescription("");
       setImages([]);
-      Alert.alert('Success', 'Grievance submitted successfully!');
+      Alert.alert("Success", "Grievance submitted successfully!");
     } catch (error) {
-      console.error('Error submitting grievance:', error);
+      console.error("Error submitting grievance:", error);
       setUploading(false);
-      Alert.alert('Error', 'Failed to submit grievance. Please try again.');
+      Alert.alert("Error", "Failed to submit grievance. Please try again.");
     }
-  }
+  };
 
   //Camera
   if (!permission) {
@@ -347,15 +375,21 @@ useEffect(() => {
     setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
   };
 
-
   return (
     <ScrollView style={{ padding: 20 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Submit a Grievance</Text>
-
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>
+        Submit a Grievance
+      </Text>
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Your Name</Text>
         <TextInput
-          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          style={{
+            height: 40,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingLeft: 8,
+          }}
           placeholder="Enter your name"
           value={userName}
           onChangeText={setUserName}
@@ -363,11 +397,16 @@ useEffect(() => {
           className="bg-gray-300"
         />
       </View>
-
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Email Address</Text>
         <TextInput
-          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          style={{
+            height: 40,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingLeft: 8,
+          }}
           placeholder="Enter your email"
           value={email}
           onChangeText={setEmail}
@@ -375,108 +414,129 @@ useEffect(() => {
           className="bg-gray-300"
         />
       </View>
-
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Phone Number</Text>
         <TextInput
-          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          style={{
+            height: 40,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingLeft: 8,
+          }}
           placeholder="Enter your phone number"
           value={phone}
           onChangeText={setPhone}
         />
       </View>
-
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Department</Text>
         <TextInput
-          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          style={{
+            height: 40,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingLeft: 8,
+          }}
           placeholder="Enter department"
           value={department}
           onChangeText={setDepartment}
         />
       </View>
-
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Grievance Type</Text>
         <TextInput
-          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          style={{
+            height: 40,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingLeft: 8,
+          }}
           placeholder="Enter grievance type"
           value={grievanceType}
           onChangeText={setGrievanceType}
         />
       </View>
-
       `{/* Location */}
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Location</Text>
         <TextInput
-        style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
-        placeholder="Enter address"
-        value={location}
-        onChangeText={setLocation}
-      />
-      {latitude && longitude ? (
-    <View className="py-4">
-      <Text className="font-semibold underline">Current Latitude:</Text>
-      <Text>{latitude}</Text>
-      <Text className="font-semibold underline">Current Longitude:</Text>
-      <Text>{longitude}</Text>
-    </View>
-  ) : (
-    <Text>No location data available yet.</Text>)}
-      </View>`
-
+          style={{
+            height: 40,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingLeft: 8,
+          }}
+          placeholder="Enter address"
+          value={location}
+          onChangeText={setLocation}
+        />
+      </View>
+      `
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Priority Level</Text>
         <TextInput
-          style={{ height: 40, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8 }}
+          style={{
+            height: 40,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingLeft: 8,
+          }}
           placeholder="Enter priority level"
           value={priority}
           onChangeText={setPriority}
         />
       </View>
-
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Description</Text>
         <TextInput
-          style={{ height: 80, borderColor: '#ccc', borderWidth: 1, borderRadius: 5, paddingLeft: 8, textAlignVertical: 'top' }}
+          style={{
+            height: 80,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingLeft: 8,
+            textAlignVertical: "top",
+          }}
           placeholder="Enter a detailed description"
           value={description}
           onChangeText={setDescription}
           multiline
         />
       </View>
-
       {/* camera */}
       <View className="flex-1 h-60">
-      <CameraView
-        ref={cameraRef}
-        style={{ flex: 1 }}
-        type={cameraType}
-      >
-        <View className="absolute bottom-0 left-0 right-0 flex flex-row justify-start ml-4 items-center mb-4 gap-5">
-          <TouchableOpacity
-            className="bg-blue-500 p-3 rounded"
-            onPress={toggleCameraType}
-          >
-            <Text className="text-white">Flip Camera</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="bg-green-500 p-3 rounded"
-            onPress={handleCapture}
-          >
-            <Text className="text-white">Capture Photo</Text>
-          </TouchableOpacity>
-        </View>
-        {latitude && longitude && (
-          <View className="absolute bottom-4 right-4 bg-white p-2 rounded">
-            <Text className="text-xs font-bold">Lat: {latitude.toFixed(6)}</Text>
-            <Text className="text-xs font-bold">Lon: {longitude.toFixed(6)}</Text>
+        <CameraView ref={cameraRef} style={{ flex: 1 }} type={cameraType}>
+          <View className="absolute bottom-0 left-0 right-0 flex flex-row justify-start ml-4 items-center mb-4 gap-5">
+            <TouchableOpacity
+              className="bg-blue-500 p-3 rounded"
+              onPress={toggleCameraType}
+            >
+              <Text className="text-white">Flip Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="bg-green-500 p-3 rounded"
+              onPress={handleCapture}
+            >
+              <Text className="text-white">Capture Photo</Text>
+            </TouchableOpacity>
           </View>
-        )}
-      </CameraView>
-    </View>
-
+          {latitude && longitude && (
+            <View className="absolute bottom-4 right-4 bg-white p-2 rounded">
+              <Text className="text-xs font-bold">
+                Lat: {latitude.toFixed(6)}
+              </Text>
+              <Text className="text-xs font-bold">
+                Lon: {longitude.toFixed(6)}
+              </Text>
+            </View>
+          )}
+        </CameraView>
+      </View>
       {/* Display Captured Photos */}
       <ScrollView className="flex flex-row h-40 mt-2" horizontal={true}>
         {photos.map((uri, index) => (
@@ -494,32 +554,36 @@ useEffect(() => {
           </View>
         ))}
       </ScrollView>
-
       <View style={{ marginBottom: 15 }}>
         <Text style={{ fontSize: 16 }}>Upload Images</Text>
         <Button title="Pick images" onPress={handleImageUpload} />
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
-          {images.length > 0 && images.map((image, index) => (
-            <Image key={index} source={{ uri: image.uri }} style={{ width: 80, height: 80, marginRight: 8 }} />
-          ))}
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
+          {images.length > 0 &&
+            images.map((image, index) => (
+              <Image
+                key={index}
+                source={{ uri: image.uri }}
+                style={{ width: 80, height: 80, marginRight: 8 }}
+              />
+            ))}
         </View>
       </View>
-
       <TouchableOpacity
         style={{
-          backgroundColor: '#4CAF50',
+          backgroundColor: "#4CAF50",
           paddingVertical: 10,
           borderRadius: 5,
-          alignItems: 'center',
+          alignItems: "center",
           opacity: uploading ? 0.5 : 1,
         }}
         onPress={handleSubmit}
         disabled={uploading}
         className="mb-10"
       >
-        <Text style={{ color: '#fff', fontSize: 16 }}>{uploading ? 'Submitting...' : 'Submit Grievance'}</Text>
+        <Text style={{ color: "#fff", fontSize: 16 }}>
+          {uploading ? "Submitting..." : "Submit Grievance"}
+        </Text>
       </TouchableOpacity>
-
     </ScrollView>
   );
 };
