@@ -27,17 +27,17 @@ const TaskShortCard = ({
     <View
       style={{
         position: "relative",
-        padding: 16,
-        backgroundColor: "#D1F7C4",
+        padding: 12,
         borderRadius: 8,
       }}
+      className="bg-slate-100"
     >
       <ImageBackground
         source={{ uri: backgroundImgLink }}
         style={{
           flex: 1,
           justifyContent: "center",
-          opacity: 0.2,
+          opacity: 0.5,
           borderRadius: 8,
         }}
       >
@@ -168,7 +168,7 @@ const Tasks = () => {
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: "space-around",
           marginBottom: 16,
         }}
       >
@@ -209,6 +209,7 @@ const Tasks = () => {
           flexDirection: "row",
           flexWrap: "wrap",
           gap: 16,
+
         }}
       >
         <Text>

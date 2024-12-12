@@ -42,6 +42,7 @@ const TopHeader = ({ language, changeLanguage, userName, setUserName, navigate }
 
     // Assuming after successful login, the username is stored in AsyncStorage
     const storedUserName = await AsyncStorage.getItem('name');
+    console.log(storedUserName);
     
     if (storedUserName) {
       // Set the userName state after login
@@ -77,6 +78,7 @@ const TopHeader = ({ language, changeLanguage, userName, setUserName, navigate }
         }
       }
     };
+    
 
     checkUserLogin();
   }, []);
